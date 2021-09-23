@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Krishna\\": "src"
+            "KrishnaFetch\\": "src"
         }
     }
 }
