@@ -9,7 +9,7 @@
             "email": "anshu.krishna5@gmail.com"
         }
     ],
-    "version": "4.0.1",
+    "version": "4.1.0",
     "require": {
         "php": ">=8.0.0"
     },
