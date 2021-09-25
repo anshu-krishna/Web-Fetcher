@@ -1,6 +1,8 @@
 <?php
 namespace KrishnaFetch;
 
+use Exception;
+
 class Server {
 	protected
 		$_base_uri = [],
@@ -10,15 +12,12 @@ class Server {
 		?string $domain = null,
 		?string $path = null
 	) {
-		$protocal = $protocal ?? 'http';
-		switch($protocal) {
-			case 'http':
-			case 'https':
-				break;
-			default:
-				$protocal = 'http';
-				break;
-		}
+		$protocal = match($protocal) {
+			null => 'http',
+			'http' => 'http',
+			'https' => 'https',
+			default => 'http'
+		};
 		$domain ??= $_SERVER['HTTP_HOST'];
 		$path ??= dirname(parse_url($_SERVER['REQUEST_URI'])['path']);
 		$this->_base_uri = "{$protocal}://{$domain}{$path}/";
@@ -52,17 +51,23 @@ class Server {
 				$file = $file . '?' . static::_query($params);
 			}
 		}
-		$response = @file_get_contents(
+		$error = null;
+		$old_handler = set_error_handler(function(int $errno, string $errstr, string $errfile, int $errline) use (&$error) {
+			$error = $errstr;
+		});
+		$http_response_header = null;
+		$response = file_get_contents(
 			filename: $file,
 			context: stream_context_create([$this->_protocal => $context])
 		);
+		set_error_handler($old_handler);
 		if($response === false) {
 			$response = null;
 		}
 		return new Result($file, $params, [
 			'req' => $headers,
 			'res' => $http_response_header
-		], $response);
+		], $response, $error);
 	}
 	public function get(string $file, ?array $params = null, ?array $headers = null) : Result {
 		return $this->_fetch('GET', $file, $headers ?? [], $params);
