@@ -9,13 +9,13 @@
             "email": "anshu.krishna5@gmail.com"
         }
     ],
-    "version": "4.1",
+    "version": "5.0",
     "require": {
         "php": ">=8.0.0"
     },
     "autoload": {
         "psr-4": {
-            "KrishnaFetch\\": "src"
+            "Krishna\\WebFetcher\\": "src"
         }
     }
 }

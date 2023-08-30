@@ -1,5 +1,5 @@
 <?php
-namespace KrishnaFetch;
+namespace Krishna\WebFetcher;
 
 use Exception;
 
@@ -38,7 +38,7 @@ class Server {
 		static::_normalize($data);
 		return http_build_query($data);
 	}
-	protected function _fetch(string $method, string $file, array $headers, ?array $params = null) : Result {
+	protected function _fetch(string $method, string $file, array $headers, ?array $params = null) : FetchResult {
 		$file = $this->_base_uri . $file;
 		$context = ['method' => $method];
 		if(count($headers) > 0) {
@@ -64,15 +64,15 @@ class Server {
 		if($response === false) {
 			$response = null;
 		}
-		return new Result($file, $params, [
+		return new FetchResult($file, $params, [
 			'req' => $headers,
 			'res' => $http_response_header
 		], $response, $error);
 	}
-	public function get(string $file, ?array $params = null, ?array $headers = null) : Result {
+	public function get(string $file, ?array $params = null, ?array $headers = null) : FetchResult {
 		return $this->_fetch('GET', $file, $headers ?? [], $params);
 	}
-	public function post(string $file, ?array $params = null, ?array $headers = null) : Result {
+	public function post(string $file, ?array $params = null, ?array $headers = null) : FetchResult {
 		$headers ??= [];
 		if($params !== null) {
 			$headers[] = 'Content-type: application/x-www-form-urlencoded';

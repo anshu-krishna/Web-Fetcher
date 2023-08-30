@@ -5,15 +5,18 @@
 	<title>Example</title>
 </head>
 <?php
-require_once 'vendor/autoload.php';
-use KrishnaFetch\Server;
+require_once '../vendor/autoload.php';
+use Krishna\WebFetcher\Server;
 
-$req = ['server.php', [
-	'msg' => 'hi',
-	'null' => null,
-	'bool' => false,
-	// 'arr' => [1, [2, 3], false]
-]];
+$req = [
+	'file' => 'server.php',
+	'params' => [
+		'msg' => 'hi',
+		'null' => null,
+		'bool' => false,
+		// 'arr' => [1, [2, 3], false]
+	]
+];
 $server = new Server();
 ?>
 <body>
